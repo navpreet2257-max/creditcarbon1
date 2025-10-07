@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Leaf, Star, ShoppingBag, TrendingUp } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { mockEcoProducts } from '../mock/data';
+import { productsAPI } from '../api/client';
 import { toast } from 'sonner';
 
 export const ProductsPage = () => {
