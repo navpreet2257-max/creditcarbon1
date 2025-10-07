@@ -301,7 +301,7 @@ export const MarketplacePage = () => {
                     {/* Availability */}
                     <div className="flex justify-between items-center">
                       <span className="body-small">
-                        {project.availableCredits.toLocaleString()} credits available
+                        {project.available_credits.toLocaleString()} credits available
                       </span>
                       {project.verified && (
                         <Badge variant="outline" className="text-green-600 border-green-600">
