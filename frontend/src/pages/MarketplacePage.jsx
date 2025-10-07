@@ -268,7 +268,7 @@ export const MarketplacePage = () => {
                       </Badge>
                       <div className="text-right">
                         <div className="heading-3" style={{ color: 'var(--accent-text)' }}>
-                          ${project.pricePerCredit}
+                          ${project.price_per_credit}
                         </div>
                         <div className="body-small">per credit</div>
                       </div>
