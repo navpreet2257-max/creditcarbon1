@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Award, TrendingUp, ShoppingCart } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { mockCarbonProjects } from '../mock/data';
+import { projectsAPI, creditsAPI } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 
 export const MarketplacePage = () => {
