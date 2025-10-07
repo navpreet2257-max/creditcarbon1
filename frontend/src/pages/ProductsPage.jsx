@@ -230,7 +230,7 @@ export const ProductsPage = () => {
                   <Card key={product.id} className="product-card">
                     <CardHeader>
                       <div className="flex justify-between items-start mb-2">
-                        <div className="text-4xl">{product.image}</div>
+                        <div className="text-4xl">{product.image_emoji}</div>
                         <div className="text-right">
                           <div className="heading-3" style={{ color: 'var(--accent-text)' }}>
                             ${product.price}
