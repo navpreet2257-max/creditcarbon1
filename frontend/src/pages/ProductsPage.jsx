@@ -275,7 +275,7 @@ export const ProductsPage = () => {
                           </span>
                         </div>
                         <div className="body-small text-green-700">
-                          This product saves {(5 - product.carbonFootprint).toFixed(1)} kg CO₂ 
+                          This product saves {(5 - product.carbon_footprint).toFixed(1)} kg CO₂ 
                           compared to conventional alternatives
                         </div>
                       </div>
