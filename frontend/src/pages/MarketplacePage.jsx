@@ -12,6 +12,9 @@ export const MarketplacePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [cart, setCart] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
 
   const projectTypes = [
     { value: 'all', label: 'All Projects' },
@@ -20,11 +23,27 @@ export const MarketplacePage = () => {
     { value: 'Community Development', label: 'Community Development' }
   ];
 
-  const filteredProjects = mockCarbonProjects.filter(project => {
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await projectsAPI.getAll(selectedType);
+        setProjects(response.data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        toast.error('Failed to load carbon projects');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [selectedType]);
+
+  const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          project.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === 'all' || project.type === selectedType;
-    return matchesSearch && matchesType;
+    return matchesSearch;
   });
 
   const addToCart = (project, credits = 10) => {
