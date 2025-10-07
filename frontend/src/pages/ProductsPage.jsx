@@ -64,8 +64,19 @@ export const ProductsPage = () => {
     toast.success(`Added ${product.name} to your wishlist!`);
   };
 
-  const contactBrand = (product) => {
-    toast.info(`Connecting you with ${product.brand}...`);
+  const contactBrand = async (product) => {
+    try {
+      const response = await productsAPI.contact({
+        product_id: product.id,
+        business_email: 'your-business@company.com', // This would come from auth context
+        message: 'I am interested in your sustainable product for our business.'
+      });
+      
+      toast.success(`Message sent to ${product.brand}!`);
+    } catch (error) {
+      console.error('Error contacting brand:', error);
+      toast.error('Failed to contact brand. Please try again.');
+    }
   };
 
   const getSustainabilityColor = (score) => {
