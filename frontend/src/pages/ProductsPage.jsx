@@ -248,15 +248,15 @@ export const ProductsPage = () => {
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="body-small">Sustainability Score:</span>
-                          <Badge className={getSustainabilityColor(product.sustainabilityScore)}>
-                            {product.sustainabilityScore}/100
+                          <Badge className={getSustainabilityColor(product.sustainability_score)}>
+                            {product.sustainability_score}/100
                           </Badge>
                         </div>
                         
                         <div className="flex justify-between items-center">
                           <span className="body-small">Carbon Footprint:</span>
                           <span className={`body-small font-medium ${carbonLevel.color}`}>
-                            {product.carbonFootprint} kg CO₂ ({carbonLevel.level})
+                            {product.carbon_footprint} kg CO₂ ({carbonLevel.level})
                           </span>
                         </div>
                         
