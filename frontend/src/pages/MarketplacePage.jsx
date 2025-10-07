@@ -343,8 +343,9 @@ export const MarketplacePage = () => {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {filteredProjects.length === 0 && (
               <div className="text-center py-12">
