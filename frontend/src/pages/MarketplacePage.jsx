@@ -258,8 +258,14 @@ export const MarketplacePage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredProjects.map((project) => (
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="body-medium">Loading carbon projects...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredProjects.map((project) => (
                 <Card key={project.id} className="product-card">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
