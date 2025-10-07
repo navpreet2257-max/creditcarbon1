@@ -318,21 +318,21 @@ export const MarketplacePage = () => {
                           className="btn-secondary flex-1"
                           size="sm"
                         >
-                          10 Credits (${(project.pricePerCredit * 10).toFixed(0)})
+                          10 Credits (${(project.price_per_credit * 10).toFixed(0)})
                         </Button>
                         <Button 
                           onClick={() => addToCart(project, 50)}
                           className="btn-secondary flex-1"
                           size="sm"
                         >
-                          50 Credits (${(project.pricePerCredit * 50).toFixed(0)})
+                          50 Credits (${(project.price_per_credit * 50).toFixed(0)})
                         </Button>
                       </div>
                       <Button 
-                        onClick={() => addToCart(project, 100)}
+                        onClick={() => purchaseCredits(project.id, 100)}
                         className="btn-primary w-full"
                       >
-                        Buy 100 Credits - ${(project.pricePerCredit * 100).toFixed(0)}
+                        Buy 100 Credits - ${(project.price_per_credit * 100).toFixed(0)}
                       </Button>
                     </div>
                   </CardContent>
