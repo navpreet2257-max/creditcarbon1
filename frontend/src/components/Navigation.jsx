@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Leaf, Menu, X } from 'lucide-react';
+import { Leaf, Menu, X, LogOut, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, business, logout } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { path: '/calculator', label: 'Calculator' },
+    { path: '/calculator', label: 'Calculator', protected: true },
     { path: '/marketplace', label: 'Marketplace' },
     { path: '/products', label: 'Eco Products' },
-    { path: '/dashboard', label: 'Dashboard' }
+    { path: '/dashboard', label: 'Dashboard', protected: true }
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  // Filter nav items based on auth status
+  const visibleNavItems = navItems.filter(item => 
+    !item.protected || (item.protected && isAuthenticated)
+  );
 
   return (
     <nav className="nav-header">
@@ -27,7 +34,7 @@ export const Navigation = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-1">
-        {navItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
@@ -38,13 +45,33 @@ export const Navigation = () => {
         ))}
       </div>
 
+      {/* Auth Section */}
       <div className="hidden md:flex items-center gap-2">
-        <Link to="/login" className="nav-link">
-          Login
-        </Link>
-        <Link to="/signup" className="btn-primary">
-          Get Started
-        </Link>
+        {isAuthenticated ? (
+          <>
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50">
+              <User className="w-4 h-4 text-green-600" />
+              <span className="body-small text-green-800">{business?.name}</span>
+            </div>
+            <button 
+              onClick={logout}
+              className="nav-link flex items-center gap-1"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
+            <Link to="/signup" className="btn-primary">
+              Get Started
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Mobile Menu Button */}
@@ -60,7 +87,7 @@ export const Navigation = () => {
       {isMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mx-2 mt-2 p-4 md:hidden">
           <div className="flex flex-col gap-2">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
@@ -71,20 +98,41 @@ export const Navigation = () => {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
-              <Link 
-                to="/login" 
-                className="nav-link"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link 
-                to="/signup" 
-                className="btn-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Get Started
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50">
+                    <User className="w-4 h-4 text-green-600" />
+                    <span className="body-small text-green-800">{business?.name}</span>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="nav-link flex items-center gap-1"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    to="/login" 
+                    className="nav-link"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    className="btn-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
