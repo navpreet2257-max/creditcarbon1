@@ -217,9 +217,15 @@ export const ProductsPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => {
-                const carbonLevel = getCarbonFootprintLevel(product.carbonFootprint);
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="body-medium">Loading eco products...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => {
+                  const carbonLevel = getCarbonFootprintLevel(product.carbon_footprint);
                 return (
                   <Card key={product.id} className="product-card">
                     <CardHeader>
