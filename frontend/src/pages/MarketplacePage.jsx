@@ -47,12 +47,17 @@ export const MarketplacePage = () => {
   });
 
   const addToCart = (project, credits = 10) => {
+    if (!isAuthenticated) {
+      toast.error('Please login to purchase credits');
+      return;
+    }
+
     const cartItem = {
       projectId: project.id,
       projectName: project.name,
       credits: credits,
-      pricePerCredit: project.pricePerCredit,
-      total: credits * project.pricePerCredit
+      pricePerCredit: project.price_per_credit,
+      total: credits * project.price_per_credit
     };
 
     setCart(prevCart => {
@@ -68,6 +73,39 @@ export const MarketplacePage = () => {
     });
 
     toast.success(`Added ${credits} credits to cart from ${project.name}`);
+  };
+
+  const purchaseCredits = async (projectId, credits) => {
+    if (!isAuthenticated) {
+      toast.error('Please login to purchase credits');
+      return;
+    }
+
+    try {
+      const response = await creditsAPI.purchase({
+        project_id: projectId,
+        credits: credits
+      });
+      
+      toast.success(`Successfully purchased ${credits} carbon credits!`);
+      
+      // Update project availability
+      setProjects(prevProjects =>
+        prevProjects.map(project =>
+          project.id === projectId
+            ? { ...project, available_credits: project.available_credits - credits }
+            : project
+        )
+      );
+      
+      // Remove from cart
+      setCart(prevCart => prevCart.filter(item => item.projectId !== projectId));
+      
+    } catch (error) {
+      console.error('Error purchasing credits:', error);
+      const message = error.response?.data?.detail || 'Failed to purchase credits';
+      toast.error(message);
+    }
   };
 
   const getTotalCartValue = () => {
