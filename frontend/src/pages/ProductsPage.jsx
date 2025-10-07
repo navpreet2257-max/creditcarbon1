@@ -11,6 +11,8 @@ export const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('sustainability');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = [
     { value: 'all', label: 'All Categories' },
@@ -20,23 +22,39 @@ export const ProductsPage = () => {
     { value: 'Home & Garden', label: 'Home & Garden' }
   ];
 
-  const filteredProducts = mockEcoProducts
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productsAPI.getAll(selectedCategory);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        toast.error('Failed to load eco products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [selectedCategory]);
+
+  const filteredProducts = products
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.brand.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      return matchesSearch;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case 'sustainability':
-          return b.sustainabilityScore - a.sustainabilityScore;
+          return b.sustainability_score - a.sustainability_score;
         case 'price-low':
           return a.price - b.price;
         case 'price-high':
           return b.price - a.price;
         case 'carbon':
-          return a.carbonFootprint - b.carbonFootprint;
+          return a.carbon_footprint - b.carbon_footprint;
         default:
           return 0;
       }
