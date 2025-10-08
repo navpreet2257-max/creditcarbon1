@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Badge } from '../components/ui/badge';
 import { productsAPI } from '../api/client';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -96,36 +97,72 @@ export const ProductsPage = () => {
     <div className="min-h-screen pt-20">
       <div className="container section-padding">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-4">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.div 
+            className="flex justify-center mb-4"
+            animate={{ 
+              rotate: [0, 5, 0, -5, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+          >
             <Leaf className="w-12 h-12" style={{ color: 'var(--accent-primary)' }} />
-          </div>
-          <h1 className="heading-1 mb-4">Eco-Friendly Products</h1>
-          <p className="body-large max-w-2xl mx-auto">
+          </motion.div>
+          <motion.h1 
+            className="heading-1 mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            Eco-Friendly Products
+          </motion.h1>
+          <motion.p 
+            className="body-large max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
             Discover sustainable products from brands committed to environmental responsibility. 
             Connect with conscious consumers and grow your sustainable business.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}
-          <div className="space-y-6">
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             {/* Search */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="heading-3 flex items-center gap-2">
-                  <Search className="w-5 h-5" />
-                  Search Products
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Input
-                  placeholder="Search products or brands..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </CardContent>
-            </Card>
+            <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 400 }}>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="heading-3 flex items-center gap-2">
+                    <motion.div
+                      animate={{ rotate: [0, 10, 0] }}
+                      transition={{ duration: 1, repeat: Infinity, repeatDelay: 5 }}
+                    >
+                      <Search className="w-5 h-5" />
+                    </motion.div>
+                    Search Products
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Input
+                    placeholder="Search products or brands..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
 
             {/* Category Filter */}
             <Card>
@@ -196,10 +233,10 @@ export const ProductsPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+           </motion.div>
 
-          {/* Products Grid */}
-          <div className="lg:col-span-3">
+           {/* Products Grid */}
+          <motion.div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6">
               <h2 className="heading-2">{filteredProducts.length} Products Found</h2>
               <div className="flex items-center gap-2">
@@ -224,93 +261,124 @@ export const ProductsPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => {
+                <AnimatePresence>
+                {filteredProducts.map((product, index) => {
                   const carbonLevel = getCarbonFootprintLevel(product.carbon_footprint);
-                return (
-                  <Card key={product.id} className="product-card">
-                    <CardHeader>
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="text-4xl">{product.image_emoji}</div>
-                        <div className="text-right">
-                          <div className="heading-3" style={{ color: 'var(--accent-text)' }}>
-                            ${product.price}
+                  return (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      whileHover={{ 
+                        scale: 1.03, 
+                        boxShadow: "0 10px 25px rgba(0,0,0,0.1)" 
+                      }}
+                    >
+                    <Card className="product-card h-full">
+                      <CardHeader>
+                        <motion.div 
+                          className="flex justify-between items-start mb-2"
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <motion.div 
+                            className="text-4xl"
+                            animate={{ rotate: [0, 5, 0, -5, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 5 }}
+                          >{product.image_emoji}</motion.div>
+                          <div className="text-right">
+                            <motion.div 
+                              className="heading-3" 
+                              style={{ color: 'var(--accent-text)' }}
+                              whileHover={{ scale: 1.1, color: "#34D399" }}
+                            >
+                              ${product.price}
+                            </motion.div>
+                          </div>
+                        </motion.div>
+                        <CardTitle className="heading-3">{product.name}</CardTitle>
+                        <CardDescription className="body-small">{product.brand}</CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent className="space-y-4">
+                        <p className="body-medium">{product.description}</p>
+                        
+                        {/* Sustainability Metrics */}
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="body-small">Sustainability Score:</span>
+                            <Badge className={getSustainabilityColor(product.sustainability_score)}>
+                              {product.sustainability_score}/100
+                            </Badge>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className="body-small">Carbon Footprint:</span>
+                            <span className={`body-small font-medium ${carbonLevel.color}`}>
+                              {product.carbon_footprint} kg CO₂ ({carbonLevel.level})
+                            </span>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className="body-small">Category:</span>
+                            <Badge variant="outline">{product.category}</Badge>
                           </div>
                         </div>
-                      </div>
-                      <CardTitle className="heading-3">{product.name}</CardTitle>
-                      <CardDescription className="body-small">{product.brand}</CardDescription>
-                    </CardHeader>
-                    
-                    <CardContent className="space-y-4">
-                      <p className="body-medium">{product.description}</p>
-                      
-                      {/* Sustainability Metrics */}
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="body-small">Sustainability Score:</span>
-                          <Badge className={getSustainabilityColor(product.sustainability_score)}>
-                            {product.sustainability_score}/100
-                          </Badge>
+                        
+                        {/* Environmental Impact */}
+                        <div className="bg-green-50 p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Leaf className="w-4 h-4 text-green-600" />
+                            <span className="body-small font-semibold text-green-800">
+                              Environmental Impact
+                            </span>
+                          </div>
+                          <div className="body-small text-green-700">
+                            This product saves {(5 - product.carbon_footprint).toFixed(1)} kg CO₂ 
+                            compared to conventional alternatives
+                          </div>
                         </div>
                         
-                        <div className="flex justify-between items-center">
-                          <span className="body-small">Carbon Footprint:</span>
-                          <span className={`body-small font-medium ${carbonLevel.color}`}>
-                            {product.carbon_footprint} kg CO₂ ({carbonLevel.level})
-                          </span>
-                        </div>
-                        
-                        <div className="flex justify-between items-center">
-                          <span className="body-small">Category:</span>
-                          <Badge variant="outline">{product.category}</Badge>
-                        </div>
-                      </div>
-                      
-                      {/* Environmental Impact */}
-                      <div className="bg-green-50 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Leaf className="w-4 h-4 text-green-600" />
-                          <span className="body-small font-semibold text-green-800">
-                            Environmental Impact
-                          </span>
-                        </div>
-                        <div className="body-small text-green-700">
-                          This product saves {(5 - product.carbon_footprint).toFixed(1)} kg CO₂ 
-                          compared to conventional alternatives
-                        </div>
-                      </div>
-                      
-                      {/* Action Buttons */}
-                      <div className="space-y-2">
-                        <Button 
-                          onClick={() => contactBrand(product)}
-                          className="btn-primary w-full"
-                        >
-                          Contact Brand
-                        </Button>
-                        <div className="flex gap-2">
+                        {/* Action Buttons */}
+                        <div className="space-y-2">
                           <Button 
-                            onClick={() => addToWishlist(product)}
-                            variant="outline" 
-                            className="btn-secondary flex-1"
-                            size="sm"
+                            onClick={() => contactBrand(product)}
+                            className="btn-primary w-full"
                           >
-                            Add to Wishlist
+                            Contact Brand
                           </Button>
-                          <Button 
-                            variant="outline" 
-                            className="btn-secondary flex-1"
-                            size="sm"
-                          >
-                            Share Product
-                          </Button>
+                          <div className="flex gap-2">
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                              <Button 
+                                onClick={() => addToWishlist(product)}
+                                variant="outline" 
+                                className="btn-secondary flex-1"
+                                size="sm"
+                              >
+                                Add to Wishlist
+                              </Button>
+                            </motion.div>
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                              <Button 
+                                variant="outline" 
+                                className="btn-secondary flex-1"
+                                size="sm"
+                              >
+                                Share Product
+                              </Button>
+                            </motion.div>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                      </CardContent>
+                    </Card>
+                    </motion.div>
+                  );
+                })}
+                </AnimatePresence>
+              </div>
+            )}
 
             {filteredProducts.length === 0 && (
               <div className="text-center py-12">
@@ -319,7 +387,7 @@ export const ProductsPage = () => {
                 <p className="body-medium">Try adjusting your search or filter criteria</p>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* Business Partnership Section */}

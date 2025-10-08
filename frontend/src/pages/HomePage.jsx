@@ -1,9 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Leaf, Calculator, Store, TrendingUp, Award, Users, Globe } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Leaf, Calculator, Store, TrendingUp, Award, Users, Globe, ChevronDown } from 'lucide-react';
 import { mockBusinesses, mockCarbonProjects } from '../mock/data';
+import { scrollToElement } from '../lib/smoothScroll';
 
 export const HomePage = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Check if there's a hash in the URL and scroll to that section
+    if (location.hash) {
+      const sectionId = location.hash.substring(1);
+      setTimeout(() => {
+        scrollToElement(sectionId, 80);
+      }, 100);
+    }
+  }, [location]);
+
+  // Scroll to section function
+  const scrollToSection = (sectionId) => {
+    scrollToElement(sectionId, 80);
+  };
+  
   const features = [
     {
       icon: <Calculator className="w-6 h-6" />,
@@ -36,8 +54,19 @@ export const HomePage = () => {
 
   return (
     <div>
+      {/* Scroll Navigation */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        <button 
+          onClick={() => scrollToSection('hero')} 
+          className="p-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-all"
+          aria-label="Scroll to top"
+        >
+          <ChevronDown className="w-5 h-5 transform rotate-180" />
+        </button>
+      </div>
+
       {/* Hero Section */}
-      <section className="hero-section">
+      <section id="hero" className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
             Help Your Business Go Carbon Neutral
@@ -54,11 +83,21 @@ export const HomePage = () => {
               Browse Projects
             </Link>
           </div>
+          <div className="mt-10 flex justify-center">
+            <button 
+              onClick={() => scrollToSection('stats')} 
+              className="flex items-center gap-2 text-green-600 hover:text-green-700 transition-all"
+              aria-label="Scroll to stats"
+            >
+              <span>Explore More</span>
+              <ChevronDown className="w-5 h-5 animate-bounce" />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="section-padding bg-white">
+      <section id="stats" className="section-padding bg-white">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
@@ -72,10 +111,20 @@ export const HomePage = () => {
             ))}
           </div>
         </div>
+        <div className="mt-10 flex justify-center">
+          <button 
+            onClick={() => scrollToSection('features')} 
+            className="flex items-center gap-2 text-green-600 hover:text-green-700 transition-all"
+            aria-label="Scroll to features"
+          >
+            <span>See Our Features</span>
+            <ChevronDown className="w-5 h-5 animate-bounce" />
+          </button>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="section-padding" style={{ backgroundColor: 'var(--bg-section)' }}>
+      <section id="features" className="section-padding" style={{ backgroundColor: 'var(--bg-section)' }}>
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-4">Complete Carbon Neutrality Solution</h2>

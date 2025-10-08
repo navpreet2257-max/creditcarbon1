@@ -28,7 +28,7 @@ export const Navigation = () => {
       <div className="flex items-center gap-2">
         <Leaf className="w-6 h-6" style={{ color: 'var(--accent-primary)' }} />
         <Link to="/" className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
-          Carbon Credit
+          CREDIT CARBON
         </Link>
       </div>
 
