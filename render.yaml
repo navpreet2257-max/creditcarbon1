@@ -2,26 +2,22 @@ services:
   - type: web
     name: carboncredits-backend
     env: python
-    buildCommand: "python3 -m pip install fastapi uvicorn"
+    buildCommand: "python3 -m pip install fastapi"
     startCommand: "python3 -c \"
 from fastapi import FastAPI
-import uvicorn
 
 app = FastAPI()
 
 @app.get('/')
-def read_root():
-    return {'message': 'Carbon Credit API is running'}
+def root():
+    return {'message': 'API is running'}
 
-@app.get('/api/health')
-def health_check():
-    return {'status': 'healthy'}
-
-@app.get('/api/')
-def api_root():
-    return {'message': 'Carbon Credit API is running'}
+@app.get('/health')
+def health():
+    return {'status': 'ok'}
 
 if __name__ == '__main__':
+    import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=10000)
 \""
     envVars:
