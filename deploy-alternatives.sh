@@ -84,3 +84,4 @@ echo "📚 For detailed instructions, see alternative-setup.md"
 
 
 
+
