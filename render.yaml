@@ -2,23 +2,39 @@ services:
   - type: web
     name: carboncredits-backend
     env: python
-    buildCommand: "echo 'Building minimal FastAPI server'"
+    buildCommand: "echo 'No build required'"
     startCommand: "python3 -c \"
-from fastapi import FastAPI
-import uvicorn
+import http.server
+import socketserver
+import json
 
-app = FastAPI()
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/' or self.path == '':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            response = {'message': 'Carbon Credit API is running'}
+            self.wfile.write(json.dumps(response).encode())
+        elif self.path == '/health':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            response = {'status': 'healthy'}
+            self.wfile.write(json.dumps(response).encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
+            response = {'error': 'Not found'}
+            self.wfile.write(json.dumps(response).encode())
 
-@app.get('/')
-def root():
-    return {'message': 'API is running'}
+    def log_message(self, format, *args):
+        pass  # Suppress default logging
 
-@app.get('/health')
-def health():
-    return {'status': 'ok'}
-
-if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=10000)
+PORT = 10000
+with socketserver.TCPServer(('', PORT), Handler) as httpd:
+    print(f'Server running on port {PORT}')
+    httpd.serve_forever()
 \""
     envVars:
       - key: PORT
