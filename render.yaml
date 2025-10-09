@@ -2,58 +2,28 @@ services:
   - type: web
     name: carboncredits-backend
     env: python
-    buildCommand: "pip install -r requirements.txt && pip install fastapi uvicorn motor python-dotenv"
+    buildCommand: "python3 -m pip install fastapi uvicorn"
     startCommand: "python3 -c \"
-import os
-import sys
-import asyncio
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
 import uvicorn
 
-# Load environment variables
-load_dotenv()
+app = FastAPI()
 
-# Create FastAPI app
-app = FastAPI(title='Carbon Credit API', version='1.0.0')
-
-# CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
-
-# MongoDB client
-client = AsyncIOMotorClient(os.getenv('MONGO_URL', 'mongodb://localhost:27017'))
-db = client[os.getenv('DB_NAME', 'carbon_credit')]
-
-# Basic routes
 @app.get('/')
-async def root():
+def read_root():
     return {'message': 'Carbon Credit API is running'}
 
 @app.get('/api/health')
-async def health_check():
-    return {'status': 'healthy', 'timestamp': '2025-01-01T00:00:00Z'}
+def health_check():
+    return {'status': 'healthy'}
 
 @app.get('/api/')
-async def api_root():
+def api_root():
     return {'message': 'Carbon Credit API is running'}
 
-# Run the server
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 8000))
-    uvicorn.run(app, host='0.0.0.0', port=port)
+    uvicorn.run(app, host='0.0.0.0', port=10000)
 \""
     envVars:
-      - key: MONGO_URL
-        value: mongodb+srv://creditcarbon:TMZteSf7yxqCv0i9@cluster0.xxxxx.mongodb.net/carbon_credit
-      - key: DB_NAME
-        value: carbon_credit
       - key: PORT
-        generateValue: true
+        value: 10000
