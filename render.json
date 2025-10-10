@@ -5,7 +5,7 @@
       "name": "carboncredits-backend",
       "env": "python",
       "buildCommand": "pip install -r backend/requirements.txt",
-      "startCommand": "PYTHONPATH=/opt/render/project python3 -c \"import sys; sys.path.append('/opt/render/project/backend'); from server import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=int(os.getenv('PORT', 8000)))\"",
+      "startCommand": "cd /opt/render/project && python3 backend/server.py",
       "envVars": [
         {
           "key": "PORT",
