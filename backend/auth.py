@@ -60,4 +60,11 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
 
 def get_current_business_id(token_data: dict = Depends(verify_token)) -> str:
     """Extract business_id from token"""
-    return token_data.get("sub")
+    business_id = token_data.get("sub")
+    if business_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return business_id
