@@ -8,7 +8,7 @@ services:
       - key: PORT
         generateValue: true
       - key: MONGO_URL
-        value: "mongodb+srv://navpreet2257_db_user:TMZteSf7yxqCv0i9@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+        value: "mongodb+srv://navpreet2257_db_user:TMZteSf7yxqCv0i9@cluster0.lfjm5r2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
       - key: DB_NAME
         value: "carbon_credit"
       - key: JWT_SECRET
