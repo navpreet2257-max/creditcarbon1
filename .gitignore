@@ -84,3 +84,4 @@ backend/data/db/journal/WiredTigerLog.0000000003
 backend/mongodb-macos-x86_64-7.0.8/bin/mongod
 backend/mongodb-macos-x86_64-7.0.8/bin/mongos
 project.zip
+backend/data/db/journal/WiredTigerLog.0000000004

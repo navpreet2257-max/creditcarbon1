@@ -2,40 +2,16 @@ services:
   - type: web
     name: carboncredits-backend
     env: python
-    buildCommand: "echo 'No build required'"
-    startCommand: "python3 -c \"
-import http.server
-import socketserver
-import json
-
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/' or self.path == '':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            response = {'message': 'Carbon Credit API is running'}
-            self.wfile.write(json.dumps(response).encode())
-        elif self.path == '/health':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
-            response = {'status': 'healthy'}
-            self.wfile.write(json.dumps(response).encode())
-        else:
-            self.send_response(404)
-            self.end_headers()
-            response = {'error': 'Not found'}
-            self.wfile.write(json.dumps(response).encode())
-
-    def log_message(self, format, *args):
-        pass  # Suppress default logging
-
-PORT = 10000
-with socketserver.TCPServer(('', PORT), Handler) as httpd:
-    print(f'Server running on port {PORT}')
-    httpd.serve_forever()
-\""
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: PORT
-        value: 10000
+        generateValue: true
+      - key: MONGO_URL
+        value: "mongodb+srv://navpreet2257_db_user:TMZteSf7yxqCv0i9@cluster0.lfjm5r2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      - key: DB_NAME
+        value: "carbon_credit"
+      - key: JWT_SECRET
+        value: "9k2J8nP5qR3tY6wE1zX4cV7bN0mL3hG5jK8pQ2rT4yW6uA9sD1fG3hJ5k"
+      - key: CORS_ORIGINS
+        value: "https://creditcarbon.netlify.app,https://credit-carbon.netlify.app"
