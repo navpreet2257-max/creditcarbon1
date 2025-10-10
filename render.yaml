@@ -3,7 +3,7 @@ services:
     name: carboncredits-backend
     env: python
     buildCommand: "pip install -r backend/requirements.txt"
-    startCommand: "cd backend && python3 -m uvicorn server:app --host 0.0.0.0 --port $PORT"
+    startCommand: "PYTHONPATH=/opt/render/project python3 -c \"import sys; sys.path.append('/opt/render/project/backend'); from server import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=int(os.getenv('PORT', 8000)))\""
     envVars:
       - key: PORT
         generateValue: true
