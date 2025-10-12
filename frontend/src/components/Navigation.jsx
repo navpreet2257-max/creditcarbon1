@@ -26,11 +26,9 @@ export const Navigation = () => {
   return (
     <nav className="nav-header">
       <div className="flex items-center gap-2">
-        <img
-          src="/logo.svg"
-          alt="Credit Carbon Technologies"
-          className="w-8 h-8"
-        />
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+          <Leaf className="w-5 h-5 text-white" />
+        </div>
         <Link to="/" className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
           CREDIT CARBON
         </Link>
