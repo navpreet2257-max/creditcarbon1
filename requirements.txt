@@ -1,5 +1,0 @@
-# Root requirements.txt - delegates to backend requirements
-# This file exists to prevent "requirements.txt not found" errors
-# during deployment processes that run from the root directory
-
-# For actual dependencies, see: backend/requirements.txt

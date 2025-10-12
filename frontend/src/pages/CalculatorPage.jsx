@@ -39,25 +39,67 @@ export const CalculatorPage = () => {
     }));
   };
 
-  const calculateFootprint = () => {
-    // Mock calculation logic
-    const energyEmissions = (parseFloat(formData.electricity) || 0) * 0.4 + (parseFloat(formData.gas) || 0) * 5.3;
-    const transportEmissions = (parseFloat(formData.fleetVehicles) || 0) * (parseFloat(formData.averageMiles) || 0) * 0.00044 + (parseFloat(formData.businessTravel) || 0) * 0.00019;
-    const operationsEmissions = (parseFloat(formData.employees) || 0) * 2.5 + (parseFloat(formData.officeSpace) || 0) * 0.02;
-    const supplyEmissions = (parseFloat(formData.suppliers) || 0) * 15 + (parseFloat(formData.shippingDistance) || 0) * 0.1;
-    
-    const totalEmissions = energyEmissions + transportEmissions + operationsEmissions + supplyEmissions;
-    
-    const breakdown = {
-      energy: energyEmissions,
-      transportation: transportEmissions,
-      operations: operationsEmissions,
-      supply: supplyEmissions,
-      total: totalEmissions
-    };
+  const calculateFootprint = async () => {
+    try {
+      // Prepare calculation data
+      const calculationData = {
+        electricity: parseFloat(formData.electricity) || 0,
+        gas: parseFloat(formData.gas) || 0,
+        renewablePercentage: parseFloat(formData.renewablePercentage) || 0,
+        fleetVehicles: parseFloat(formData.fleetVehicles) || 0,
+        averageMiles: parseFloat(formData.averageMiles) || 0,
+        businessTravel: parseFloat(formData.businessTravel) || 0,
+        employees: parseFloat(formData.employees) || 0,
+        officeSpace: parseFloat(formData.officeSpace) || 0,
+        dataCenter: formData.dataCenter,
+        manufacturing: formData.manufacturing,
+        suppliers: parseFloat(formData.suppliers) || 0,
+        shippingDistance: parseFloat(formData.shippingDistance) || 0,
+        packaging: formData.packaging
+      };
 
-    setCalculationResults(breakdown);
-    toast.success('Carbon footprint calculated successfully!');
+      // Try to call backend API first
+      try {
+        const response = await fetch(`${API_BASE_URL}/calculator/calculate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(calculationData)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setCalculationResults(result);
+          toast.success('Carbon footprint calculated successfully!');
+          return;
+        }
+      } catch (apiError) {
+        console.log('Backend API not available, using local calculation');
+      }
+
+      // Fallback to local calculation if backend unavailable
+      const energyEmissions = (parseFloat(formData.electricity) || 0) * 0.4 + (parseFloat(formData.gas) || 0) * 5.3;
+      const transportEmissions = (parseFloat(formData.fleetVehicles) || 0) * (parseFloat(formData.averageMiles) || 0) * 0.00044 + (parseFloat(formData.businessTravel) || 0) * 0.00019;
+      const operationsEmissions = (parseFloat(formData.employees) || 0) * 2.5 + (parseFloat(formData.officeSpace) || 0) * 0.02;
+      const supplyEmissions = (parseFloat(formData.suppliers) || 0) * 15 + (parseFloat(formData.shippingDistance) || 0) * 0.1;
+
+      const totalEmissions = energyEmissions + transportEmissions + operationsEmissions + supplyEmissions;
+
+      const breakdown = {
+        energy: energyEmissions,
+        transportation: transportEmissions,
+        operations: operationsEmissions,
+        supply: supplyEmissions,
+        total: totalEmissions
+      };
+
+      setCalculationResults(breakdown);
+      toast.success('Carbon footprint calculated successfully!');
+    } catch (error) {
+      console.error('Calculation error:', error);
+      toast.error('Error calculating carbon footprint');
+    }
   };
 
   const resetCalculator = () => {
