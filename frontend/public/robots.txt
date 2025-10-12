@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (update with your actual domain)
+Sitemap: https://creditcarbon.netlify.app/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Disallow common sensitive paths
+Disallow: /api/
+Disallow: /admin/
+Disallow: /login
+Disallow: /signup
+Disallow: /dashboard
+
+# Allow important pages
+Allow: /
+Allow: /calculator
+Allow: /marketplace
+Allow: /products
