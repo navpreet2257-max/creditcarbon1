@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 // API Configuration
-const API_BASE_URL = 'http://54.227.62.67:8000';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://54.227.62.67:8000';
 const API_BASE = `${BACKEND_URL}/api`;
 
 // Create axios instance with default config

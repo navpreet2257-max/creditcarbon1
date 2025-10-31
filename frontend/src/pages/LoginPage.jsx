@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Leaf } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Leaf, Chrome } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -13,8 +13,9 @@ export const LoginPage = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +34,26 @@ export const LoginPage = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const token = urlParams.get('token');
+    const businessId = urlParams.get('business_id');
+    const businessName = urlParams.get('business_name');
+    const error = urlParams.get('error');
+
+    if (error) {
+      console.error('Google OAuth error:', error);
+      // You could show an error toast here
+    } else if (token && businessId && businessName) {
+      // Handle successful Google login
+      loginWithGoogle(token, businessId, businessName, '');
+      navigate('/dashboard');
+    }
+  }, [location, loginWithGoogle, navigate]);
+
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-section)' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 25%, #b8ddc0 50%, #a8d3b0 75%, #98c9a0 100%)' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -81,14 +100,41 @@ export const LoginPage = () => {
                 />
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="btn-primary w-full"
                 disabled={loading}
               >
                 {loading ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
+
+            {/* Divider */}
+            <div className="relative mt-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              </div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="mt-6">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  // Google OAuth implementation - using backend API
+                  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+                  window.location.href = `${backendUrl}/api/auth/google`;
+                }}
+              >
+                <Chrome className="w-4 h-4 mr-2" />
+                Sign in with Google
+              </Button>
+            </div>
 
             <div className="mt-6 text-center">
               <p className="body-small">

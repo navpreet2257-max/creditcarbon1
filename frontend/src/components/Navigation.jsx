@@ -24,23 +24,23 @@ export const Navigation = () => {
   );
 
   return (
-    <nav className="nav-header">
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-          <Leaf className="w-5 h-5 text-white" />
+    <nav className="nav-header-enhanced">
+      <div className="nav-logo-enhanced">
+        <div className="nav-logo-icon">
+          <Leaf className="w-3 h-3 text-white" />
         </div>
-        <Link to="/" className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
+        <Link to="/" className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
           CREDIT CARBON
         </Link>
       </div>
 
       {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center gap-1">
+      <div className="hidden md:flex items-center gap-2">
         {visibleNavItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
-            className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+            className={`nav-link-enhanced ${isActive(item.path) ? 'active' : ''}`}
           >
             {item.label}
           </Link>
@@ -48,25 +48,27 @@ export const Navigation = () => {
       </div>
 
       {/* Auth Section */}
-      <div className="hidden md:flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-3">
         {isAuthenticated ? (
           <>
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50">
-              <User className="w-4 h-4 text-green-600" />
-              <span className="body-small text-green-800">{business?.name}</span>
+            <div className="user-badge-enhanced">
+              <User className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+              <span className="body-small font-medium" style={{ color: 'var(--text-primary)' }}>
+                {business?.name}
+              </span>
             </div>
-            <button 
+            <button
               onClick={logout}
-              className="nav-link flex items-center gap-1"
+              className="nav-link-enhanced flex items-center gap-2"
               title="Logout"
             >
               <LogOut className="w-4 h-4" />
-              Logout
+              <span>Logout</span>
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="nav-link">
+            <Link to="/login" className="nav-link-enhanced">
               Login
             </Link>
             <Link to="/signup" className="btn-primary">
@@ -87,47 +89,49 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mx-2 mt-2 p-4 md:hidden">
-          <div className="flex flex-col gap-2">
+        <div className="mobile-menu-enhanced md:hidden">
+          <div className="flex flex-col gap-3">
             {visibleNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+                className={`nav-link-enhanced ${isActive(item.path) ? 'active' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
+            <div className="flex flex-col gap-3 pt-3 border-t border-white/20">
               {isAuthenticated ? (
                 <>
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50">
-                    <User className="w-4 h-4 text-green-600" />
-                    <span className="body-small text-green-800">{business?.name}</span>
+                  <div className="user-badge-enhanced">
+                    <User className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                    <span className="body-small font-medium" style={{ color: 'var(--text-primary)' }}>
+                      {business?.name}
+                    </span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => {
                       logout();
                       setIsMenuOpen(false);
                     }}
-                    className="nav-link flex items-center gap-1"
+                    className="nav-link-enhanced flex items-center gap-2 text-left"
                   >
                     <LogOut className="w-4 h-4" />
-                    Logout
+                    <span>Logout</span>
                   </button>
                 </>
               ) : (
                 <>
-                  <Link 
-                    to="/login" 
-                    className="nav-link"
+                  <Link
+                    to="/login"
+                    className="nav-link-enhanced"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Login
                   </Link>
-                  <Link 
-                    to="/signup" 
+                  <Link
+                    to="/signup"
                     className="btn-primary"
                     onClick={() => setIsMenuOpen(false)}
                   >
